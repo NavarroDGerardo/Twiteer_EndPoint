@@ -1,13 +1,23 @@
-from flask import Flask, render_template
+from typing import OrderedDict
+from dotenv.main import load_dotenv
+from flask import Flask
 from flask_mysqldb import MySQL
+from os import getenv
+from dotenv import load_dotenv
+
 app = Flask(__name__)
 
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'tweeter_app'
+# load .env file
+load_dotenv()
 
-mysql = MySQL(app)
+print(getenv('MYSQL_HOST'))
+
+app.config['MYSQL_HOST'] = getenv('MYSQL_HOST')
+app.config['MYSQL_USER'] = getenv('MYSQL_USER')
+app.config['MYSQL_PASSWORD'] = getenv('MYSQL_PASSWORD')
+app.config['MYSQL_DB'] = getenv('MYSQL_DB')
+
+mysql = MySQL(app) # Initialize MySQL
 
 @app.route('/health', methods=['GET'])
 def health_check():
