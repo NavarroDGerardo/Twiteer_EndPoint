@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_PASSWORD'] = 'Zangetsu+18'
 app.config['MYSQL_DB'] = 'tweeter_app'
 
 mysql = MySQL(app)
@@ -31,6 +31,7 @@ def get_users():
   cur.execute("SELECT name FROM users")
   tuples = cur.fetchall()
   cur.close()
+  print(tuples)
   return tuples
 
 if __name__ == '__main__':
