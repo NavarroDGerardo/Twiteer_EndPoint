@@ -12,7 +12,8 @@ def landing_page():
 
 @app.route('/tweets', methods=['GET'])
 def all_tweets():
-  return "TBD"
+  tweets = request.get('https://aggregate:5000/tweets').json()
+  return render_template("index.html", tweets=tweets)
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0')
