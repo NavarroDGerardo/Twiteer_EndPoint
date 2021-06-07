@@ -1,3 +1,4 @@
+import socket
 from flask import Flask, render_template, request
 from flask_mysqldb import MySQL
 app = Flask(__name__)
@@ -34,6 +35,11 @@ def agregar_user():
   mysql.connection.commit()
   cur.close()
   return render_template("index.html")
+
+def get_user_ip():
+  hostname = socket.gethostname()
+  ip_address = socket.gethostbyname(hostname)
+  return ip_address
 
 
 if __name__ == '__main__':

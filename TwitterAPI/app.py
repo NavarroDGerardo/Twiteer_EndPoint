@@ -11,6 +11,7 @@ def health_check():
 @app.route('/tweet/<string:user>', methods=['POST'])
 def register(user):
   api = TwitterAPI()
+  
   return flask.jsonify(api.get_user_timeline(user))
 
 if __name__ == '__main__':

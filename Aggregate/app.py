@@ -9,11 +9,18 @@ def health_check():
 @app.route('/tweets', methods=['GET'])
 def users_tweets():
   users = request.get('http://user:5000/users').json()
-  tweets = [get_tweets(users[i[0]]) for i in range(0, len(users))]
+
+  tweets = []
+  for user in users:
+    tweets.append({
+      user: user,
+      tweets: get_tweets(user)
+    })
+
   return jsonify(tweets)
 
-def get_tweets(id):
-  return request.get('http://api:5000/{}').format(id).json()
+def get_tweets(username):
+  return request.get('http://api:5000/tweet/{}').format(username).json()
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0')
