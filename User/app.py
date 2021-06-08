@@ -1,5 +1,6 @@
-from typing import OrderedDict
+import json
 from dotenv.main import load_dotenv
+import flask
 from flask import Flask
 from flask_mysqldb import MySQL
 from os import getenv
@@ -23,26 +24,30 @@ mysql = MySQL(app) # Initialize MySQL
 def health_check():
   return "Fine"
 
-@app.route('/register', methods=['POST'])
-def register():
-  return "TBD"
-
-@app.route('/login', methods=['POST'])
-def login():
-  return "TBD"
-
-@app.route('/signout', methods=['POST'])
-def signout():
-  return "TBD"
+@app.route('/add/<string:username>', methods=['POST'])
+def add_user(username):
+  print(username)
+  try:
+    cur = mysql.connection.cursor()
+    cur.execute( "INSERT INTO users (name) VALUES (%s)", [username])
+    mysql.connection.commit()
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+  except TypeError as e:
+    return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+  finally:
+    cur.close()
 
 @app.route('/users', methods=['GET'])
 def get_users():
-  cur = mysql.connection.cursor()
-  cur.execute("SELECT name FROM users")
-  tuples = cur.fetchall()
-  cur.close()
-  print(tuples)
-  return tuples
+  try:
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT name FROM users")
+    tuples = cur.fetchall()
+    return flask.jsonify(tuples)
+  except TypeError as e:
+    return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+  finally:
+    cur.close()
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0')
+  app.run(host='0.0.0.0', port=5001)

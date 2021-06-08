@@ -34,12 +34,14 @@
                         <th scope="col-9" class="text-center">Content</th>
                     </tr>
                 </thead>
+                {% for tweet in tweets %}
                 <tbody>
                     <tr style="background-color: #E1E8ED;" class="border border-dark">
-                        <td class="text-center">@el_kim</td>
-                        <td class="text-center">Saquen las frias</td>
+                        <td class="text-center">{{tweet["user"]}}</td>
+                        <td class="text-center">{{tweet["tweets"][0]}}</td>
                     </tr>
                 </tbody>
+                {% endfor %}
             </table>
           </div>
           <div class="col-1"></div>

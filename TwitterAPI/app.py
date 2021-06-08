@@ -8,11 +8,11 @@ app = Flask(__name__)
 def health_check():
   return "Fine"
 
-@app.route('/tweet/<string:user>', methods=['POST'])
+@app.route('/tweet/<string:user>', methods=['GET'])
 def register(user):
   api = TwitterAPI()
-  
-  return flask.jsonify(api.get_user_timeline(user))
+  tweets = api.get_user_timeline(user)
+  return flask.jsonify(tweets)
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0')
+  app.run(host='0.0.0.0', port=5002)

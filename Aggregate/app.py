@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
+import requests
 
 app = Flask(__name__)
 
@@ -8,19 +9,18 @@ def health_check():
 
 @app.route('/tweets', methods=['GET'])
 def users_tweets():
-  users = request.get('http://user:5000/users').json()
-
-  tweets = []
+  users = requests.get('http://192.168.1.73:5001/users').json()
+  usertweets = []
   for user in users:
-    tweets.append({
-      user: user,
-      tweets: get_tweets(user)
+    username = user[0]
+    usertweets.append({
+      "user": username,
+      "tweets": get_tweets(username)
     })
-
-  return jsonify(tweets)
+  return jsonify(usertweets)
 
 def get_tweets(username):
-  return request.get('http://api:5000/tweet/{}').format(username).json()
+  return requests.get('http://192.168.1.73:5002/tweet/{}'.format(username)).json()
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0')
+  app.run(host='0.0.0.0', port=5003)

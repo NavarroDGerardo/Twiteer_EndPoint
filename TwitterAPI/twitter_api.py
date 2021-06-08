@@ -25,7 +25,9 @@ class TwitterAPI(object):
 
   def get_user_timeline(self, user_name):
     tweet_list = []
-    for tweet in tweepy.Cursor(self.api.user_timeline, screen_name=user_name, tweet_mode="extended").items(10):
-      tweet_list.append(tweet._json["full_text"])
-
+    try:
+      for tweet in tweepy.Cursor(self.api.user_timeline, screen_name=user_name, tweet_mode="extended").items(10):
+        tweet_list.append(tweet._json["full_text"])
+    except tweepy.TweepError:
+      pass
     return tweet_list

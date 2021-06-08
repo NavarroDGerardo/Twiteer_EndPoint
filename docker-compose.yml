@@ -1,0 +1,33 @@
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./App
+    ports:
+      - 5000:5000
+    environment:
+      - DEBUG=True
+  user:
+    container_name: user
+    build:
+      context: ./User
+    ports:
+      - 5001:5000
+    environment:
+      - DEBUG=True
+  api:
+    container_name: twitter_api
+    build:
+      context: ./TwitterAPI
+    ports:
+      - 5002:5000
+    environment:
+      - DEBUG=True
+  aggregate:
+    container_name: aggregate
+    build:
+      context: ./Aggregate
+    ports:
+      - 5003:5000
+    environment:
+      - DEBUG=True
