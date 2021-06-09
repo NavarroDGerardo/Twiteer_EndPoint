@@ -1,6 +1,7 @@
 import socket
 import csv
 import logging
+from pathlib import Path
 from datetime import date
 import requests
 from flask import Flask, render_template, request
@@ -14,7 +15,7 @@ def health_check():
 
 @app.route('/', methods=['GET'])
 def landing_page():
-  tweets = requests.get('http://twitter_api:5000/tweets').json()
+  tweets = requests.get('http://aggregate:5000/tweets').json()
   add_petition()
   create_log(tweets)
   return render_template("index.html", tweets=tweets)
@@ -36,7 +37,8 @@ def get_user_ip():
   return ip_address
 
 def create_log(tweets):
-  (ip, host) = get_user_ip()
+  ip = get_user_ip()
+  Path("./log_responses").mkdir(exist_ok=True)
   with open("log_responses/{}-{}.csv".format(ip, date.today()), 'w', encoding="utf-8") as file:
     writer = csv.writer(file)
     writer.writerow(["username", "Content"])
@@ -46,6 +48,7 @@ def create_log(tweets):
 
 def add_petition():
   return requests.post('http://user:5000/add_petition')
+
 
 if __name__ == '__main__':
   app.logger.setLevel(logging.INFO)

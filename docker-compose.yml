@@ -1,8 +1,8 @@
 services:
   db:
     image: mysql:5.7.22
-    container_name: db
-    restart: unless-stopped
+    container_name: mysql_db
+    restart: always
     tty: true
     ports:
       - "3307:3306"
@@ -11,7 +11,7 @@ services:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_USER: root
     volumes:
-      - ./Database:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/mysql
     networks:
       - app-network
   backend:
@@ -20,6 +20,10 @@ services:
       context: ./App
     ports:
       - 5000:5000
+    environment:
+      - DEBUG=True
+    networks:
+      - app-network
   user:
     container_name: user
     build:
@@ -28,13 +32,9 @@ services:
       - 5001:5000
     environment:
       - DEBUG=True
-    volumes:
-      - ./app:/app
     networks:
       - app-network
     depends_on:
-      - db
-    links:
       - db
   api:
     container_name: twitter_api
@@ -44,6 +44,8 @@ services:
       - 5002:5000
     environment:
       - DEBUG=True
+    networks:
+      - app-network
   aggregate:
     container_name: aggregate
     build:
@@ -52,8 +54,10 @@ services:
       - 5003:5000
     environment:
       - DEBUG=True
-
+    networks:
+      - app-network
+volumes:
+  db_data: {}
 #Docker Networks
 networks:
   app-network:
-    driver: bridge

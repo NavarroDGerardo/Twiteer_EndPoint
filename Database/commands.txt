@@ -1,1 +1,5 @@
-docker exec -i db sh -c "exec mysql -u root -p"admin"" < tweeter_app_users.sql
+mysql -u root -p
+admin
+docker exec -i mysql_db sh -c "exec mysql -u root -p"admin"" < tweeter_app_users.sql
+docker exec -i mysql_db sh -c "exec mysql -u root -p"admin"" < tweeter_app_estadisticas.sql
+docker exec -i mysql_db sh -c "exec mysql -u root -p"admin"" < tweeter_app_max_connections.sql

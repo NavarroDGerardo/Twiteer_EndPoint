@@ -1,6 +1,4 @@
 import json
-from typing import Type
-from typing_extensions import final
 from dotenv.main import load_dotenv
 import flask
 from flask import Flask
@@ -24,11 +22,10 @@ mysql = MySQL(app) # Initialize MySQL
 
 @app.route('/health', methods=['GET'])
 def health_check():
-  return "Fine"
+  return "Fine1"
 
 @app.route('/add/<string:username>', methods=['POST'])
 def add_user(username):
-  print(username)
   try:
     cur = mysql.connection.cursor()
     cur.execute( "INSERT INTO users (name) VALUES (%s)", [username])
@@ -41,6 +38,7 @@ def add_user(username):
 
 @app.route('/users', methods=['GET'])
 def get_users():
+  print()
   try:
     cur = mysql.connection.cursor()
     cur.execute("SELECT name FROM users")
@@ -59,7 +57,7 @@ def add_petition():
     cur.execute("SELECT * from estadisticas WHERE dia = %s", [today])
     results = cur.fetchone()
     if results == None:
-      cur.execute("INSERT INTO estadisticas(peticiones, dia) VALUES(0, %s)", [today])
+      cur.execute("INSERT INTO estadisticas(peticiones, dia) VALUES(1, %s)", [today])
     else:
       cur.execute("UPDATE estadisticas SET peticiones = %s WHERE dia = %s", [results[1] + 1, today])
     mysql.connection.commit()

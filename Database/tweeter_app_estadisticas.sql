@@ -28,7 +28,7 @@ CREATE TABLE `estadisticas` (
   `peticiones` int NOT NULL,
   `dia` date NOT NULL,
   PRIMARY KEY (`id_estadisticas`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
