@@ -1,5 +1,6 @@
 import socket
 import csv
+import logging
 from datetime import date
 import requests
 from flask import Flask, render_template, request
@@ -47,4 +48,5 @@ def add_petition():
   return requests.post('http://user:5000/add_petition')
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', port=5000)
+  app.logger.setLevel(logging.INFO)
+  app.run(host='0.0.0.0')
