@@ -3,6 +3,7 @@ from dotenv.main import load_dotenv
 import flask
 from flask import Flask
 from flask_mysqldb import MySQL
+from flask_mysqldb import MySQLdb
 from datetime import date
 from os import getenv
 from dotenv import load_dotenv
@@ -45,7 +46,9 @@ def get_users():
     tuples = cur.fetchall()
     return flask.jsonify(tuples)
   except TypeError as e:
-    return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+    return flask.jsonify([])
+  except MySQLdb.Error as e:
+    return flask.jsonify([])
   finally:
     cur.close()
 
@@ -63,6 +66,8 @@ def add_petition():
     mysql.connection.commit()
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
   except TypeError as e:
+    return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+  except MySQLdb.Error as e:
     return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
   finally: 
     cur.close()

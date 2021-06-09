@@ -20,7 +20,7 @@ def users_tweets():
   return jsonify(usertweets)
 
 def get_tweets(username):
-  return requests.get('http://twitter_api:5000/tweet/{}'.format(username)).json()
+  return requests.get('http://api:5000/tweet/{}'.format(username)).json()
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0')

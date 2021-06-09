@@ -1,4 +1,7 @@
+version: "2"
+
 services:
+
   db:
     image: mysql:5.7.22
     container_name: mysql_db
@@ -14,6 +17,7 @@ services:
       - db_data:/var/lib/mysql
     networks:
       - app-network
+
   backend:
     container_name: backend
     build:
@@ -24,6 +28,7 @@ services:
       - DEBUG=True
     networks:
       - app-network
+
   user:
     container_name: user
     build:
@@ -36,8 +41,9 @@ services:
       - app-network
     depends_on:
       - db
+
   api:
-    container_name: twitter_api
+    container_name: api
     build:
       context: ./TwitterAPI
     ports:
@@ -46,6 +52,7 @@ services:
       - DEBUG=True
     networks:
       - app-network
+
   aggregate:
     container_name: aggregate
     build:
@@ -56,8 +63,9 @@ services:
       - DEBUG=True
     networks:
       - app-network
+
 volumes:
   db_data: {}
-#Docker Networks
+  
 networks:
   app-network:

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose.exe --file docker-cimage.yml convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: aggregate
+  name: aggregate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: aggregate
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose.exe --file docker-cimage.yml convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/twiteerendpoint_app-network: "true"
+        io.kompose.service: aggregate
+    spec:
+      containers:
+      - env:
+        - name: DEBUG
+          value: "True"
+        image: twiteer_endpoint_aggregate
+        imagePullPolicy: "IfNotPresent"
+        name: aggregate
+        ports:
+        - containerPort: 5000
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

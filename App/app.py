@@ -3,6 +3,7 @@ import csv
 import logging
 from pathlib import Path
 from datetime import date
+from typing import Type
 import requests
 from flask import Flask, render_template, request
 from werkzeug.utils import redirect
@@ -15,10 +16,14 @@ def health_check():
 
 @app.route('/', methods=['GET'])
 def landing_page():
-  tweets = requests.get('http://aggregate:5000/tweets').json()
-  add_petition()
-  create_log(tweets)
-  return render_template("index.html", tweets=tweets)
+  try:
+    tweets = requests.get('http://aggregate:5000/tweets').json()
+    add_petition()
+    create_log(tweets)
+    return render_template("index.html", tweets=tweets)
+  except TypeError as e:
+    print(e)
+    return render_template("index.html", tweets=[])
 
 @app.route("/addUser")
 def addUser():
@@ -27,9 +32,13 @@ def addUser():
 @app.route("/agregar_user", methods=['POST'])
 def agregar_user():
   name = request.form["name"]
-  requests.post('http://user:5000/add/{}'.format(name))
-  add_petition()
-  return redirect("/")
+  try:
+    requests.post('http://user:5000/add/{}'.format(name))
+    add_petition()
+    return redirect("/")
+  except TypeError as e:
+    print(e)
+    return redirect("/")
 
 def get_user_ip():
   hostname = socket.gethostname()
