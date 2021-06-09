@@ -9,7 +9,7 @@ def health_check():
 
 @app.route('/tweets', methods=['GET'])
 def users_tweets():
-  users = requests.get('http://192.168.1.73:5001/users').json()
+  users = requests.get('http://user:5000/users').json()
   usertweets = []
   for user in users:
     username = user[0]
@@ -20,7 +20,7 @@ def users_tweets():
   return jsonify(usertweets)
 
 def get_tweets(username):
-  return requests.get('http://192.168.1.73:5002/tweet/{}'.format(username)).json()
+  return requests.get('http://twitter_api:5000/tweet/{}'.format(username)).json()
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', port=5003)
+  app.run(host='0.0.0.0')

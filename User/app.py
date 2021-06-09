@@ -1,11 +1,13 @@
 import json
+from typing import Type
+from typing_extensions import final
 from dotenv.main import load_dotenv
 import flask
 from flask import Flask
 from flask_mysqldb import MySQL
+from datetime import date
 from os import getenv
 from dotenv import load_dotenv
-
 app = Flask(__name__)
 
 # load .env file
@@ -49,5 +51,23 @@ def get_users():
   finally:
     cur.close()
 
+@app.route('/add_petition', methods=['POST'])
+def add_petition():
+  try:
+    cur = mysql.connection.cursor()
+    today = date.today()
+    cur.execute("SELECT * from estadisticas WHERE dia = %s", [today])
+    results = cur.fetchone()
+    if results == None:
+      cur.execute("INSERT INTO estadisticas(peticiones, dia) VALUES(0, %s)", [today])
+    else:
+      cur.execute("UPDATE estadisticas SET peticiones = %s WHERE dia = %s", [results[1] + 1, today])
+    mysql.connection.commit()
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+  except TypeError as e:
+    return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+  finally: 
+    cur.close()
+
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', port=5001)
+  app.run(host='0.0.0.0')
